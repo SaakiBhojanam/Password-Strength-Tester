@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Strength Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      outline: none;
+      box-sizing: border-box;
+    }
+    input[type="password"]:focus {
+      border-color: #007BFF;
+    }
+    .strength {
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      text-align: center;
+      color: white;
+    }
+    .strength.weak {
+      background-color: #FF4B4B;
+    }
+    .strength.medium {
+      background-color: #FFB74D;
+    }
+    .strength.strong {
+      background-color: #4CAF50;
+    }
+    .criteria {
+      margin-top: 1rem;
+      text-align: left;
+    }
+    .criteria li {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .criteria li span {
+      font-weight: bold;
+      color: #007BFF;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Password Strength Checker</h1>
+  <input type="password" id="password" placeholder="Enter your password">
+  <div id="strength" class="strength">Enter a password to check strength</div>
+  <ul class="criteria">
+    <li><span>Weak:</span> Less than 8 characters</li>
+    <li><span>Medium:</span> At least 8 characters, with letters and numbers</li>
+    <li><span>Strong:</span> At least 10 characters, with letters, numbers, and symbols</li>
+  </ul>
+</div>
+<script>
+  const passwordInput = document.getElementById('password');
+  const strengthDisplay = document.getElementById('strength');
+
+  passwordInput.addEventListener('input', () => {
+    const password = passwordInput.value;
+    const strength = getPasswordStrength(password);
+    displayStrength(strength);
+  });
+
+  function getPasswordStrength(password) {
+    if (password.length < 8) {
+      return 'weak';
+    }
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasMixedCase = /[a-z]/.test(password) && /[A-Z]/.test(password);
+
+    if (password.length >= 10 && hasNumbers && hasSpecialChars && hasMixedCase) {
+      return 'strong';
+    }
+    if (password.length >= 8 && (hasNumbers || hasSpecialChars || hasMixedCase)) {
+      return 'medium';
+    }
+    return 'weak';
+  }
+
+  function displayStrength(strength) {
+    strengthDisplay.textContent = `Strength: ${capitalizeFirstLetter(strength)}`;
+    strengthDisplay.className = `strength ${strength}`;
+  }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+</script>
+</body>
+</html>
